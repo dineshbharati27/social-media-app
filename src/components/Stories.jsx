@@ -25,14 +25,18 @@ const stories = [
 
 const Stories = () => {
   return (
-    <div className="flex space-x-4 overflow-x-scroll hide-scrollbar p-4">
+    <div className="flex space-x-3 overflow-x-scroll hide-scrollbar mt-2 py-2 sm:py-3">
       {stories.map(story => (
-        <div key={story.id} className="text-center">
-          <img src={story.img} alt={story.name} className="w-16 h-16 rounded-full border-2 border-pink-500 p-1" />
-          <p className="text-white text-sm mt-1">{story.name}</p>
+        <div key={story.id} className="flex flex-col items-center">
+          <img src={story.img} 
+                alt={story.name} 
+                className="w-12 h-12 sm:w-12 sm:h-12 md:w-16 md:h-16 rounded-full border-2 border-pink-500 p-1" />
+          <p className="text-white text-xs sm:text-sm mt-0.5 leading-none">{story.name}</p>
         </div>
       ))}
     </div>
+
+
   );
 };
 

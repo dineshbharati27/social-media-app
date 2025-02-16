@@ -42,17 +42,19 @@ const MyBlogs = () => {
 
   return (
     <div className="min-h-screen bg-gray-50 py-10">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between px-20 sm:px-1 items-center mb-8">
-          <h1 className="text-3xl font-bold text-gray-900">My Blogs</h1>
+      <div className="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8">
+
+        <div className="flex flex-wrap justify-between items-center px-4 sm:px-6 md:px-8 lg:px-20 mb-8">
+          <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-gray-900">My Blogs</h1>
           <Link
             to="/home/create"
-            className="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700"
+            className="inline-flex items-center px-3 sm:px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700"
           >
-            <PlusCircle className="h-5 w-5 mr-2" />
+            <PlusCircle className="h-4 w-4 sm:h-5 sm:w-5 mr-2" />
             Create New Blog
           </Link>
         </div>
+
 
         {userBlogs.length === 0 ? (
           <div className="text-center py-12">
@@ -66,7 +68,7 @@ const MyBlogs = () => {
             </Link>
           </div>
         ) : ( 
-          <div className="mt-12 px-4 sm:px-6 md:px-8 lg:px-12 max-w-3xl mx-auto flex flex-col gap-8">
+          <div className="mt-5 sm:mt-12 px-1 sm:px-6 md:px-8 lg:px-12 max-w-3xl mx-auto flex flex-col gap-8">
             {userBlogs.map((blog) => (
               <BlogCard key={blog._id} blog={blog} user={user} allUsers={allUsers} isMyBlog={true} onDelete={handleDelete} onEdit={handleEdit} />
             ))}

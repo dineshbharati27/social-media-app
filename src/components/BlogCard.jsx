@@ -14,6 +14,9 @@ const BlogCard = ({ blog, allUsers, user, isMyBlog, onDelete, onEdit }) => {
   const currentUser = useSelector(state => state.auth.user);
   const isLiked = blog.likes?.includes(currentUser?._id);
 
+  const [expanded, setExpanded] = useState(false);
+  const MAX_LENGTH = 150;
+
   const handleLike = () => {
     dispatch(likeBlog(blog._id));
   };
@@ -57,12 +60,12 @@ const BlogCard = ({ blog, allUsers, user, isMyBlog, onDelete, onEdit }) => {
           onClick={() => navigate(`/home/userprofile/${user._id}`)}
           src={user?.image || "/default-profile.png"}
           alt={user?.name || "Unknown User"}
-          className="h-10 w-10 rounded-full object-cover cursor-pointer"
+          className="h-10 w-10 md:h-12 md:w-12 rounded-full object-cover cursor-pointer"
         />
         <div>
           <h3 
             onClick={() => navigate(`/home/userprofile/${user._id}`)} 
-            className="text-sm font-semibold text-gray-900 cursor-pointer"
+            className="text-sm md:text-lg font-semibold text-gray-900 cursor-pointer"
           >
             {user?.name || "Unknown User"}
           </h3>
@@ -82,7 +85,17 @@ const BlogCard = ({ blog, allUsers, user, isMyBlog, onDelete, onEdit }) => {
 
       {/* Blog Content */}
       <h2 className="text-lg font-semibold text-gray-900 mb-1">{blog.title}</h2>
-      <p className="text-gray-600 text-sm mb-2">{blog.description}</p>
+      <p className="text-gray-600 text-sm mb-2">
+        {expanded ? blog.description : blog.description.slice(0, MAX_LENGTH) + '...'}
+        {blog.description.length > MAX_LENGTH && (
+          <button 
+            className="text-blue-600 cursor-pointer"
+            onClick={() => setExpanded(!expanded)}
+          >
+            {expanded ? 'Read Less' : 'Read More'}
+          </button>
+        )}
+      </p>
       <img src={blog.image} alt={blog.title} className="w-full h-auto rounded-lg mt-2" />
 
       {/* Action Buttons */}

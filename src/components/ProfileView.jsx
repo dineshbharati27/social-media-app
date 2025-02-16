@@ -45,19 +45,19 @@ const ProfileView = ({ userId = null }) => {
 
   return (
     <>
-      <div className="max-w-3xl mx-auto mt-10 p-5 bg-white rounded-2xl shadow-lg">
-        <div className="flex items-center p-5 pr-10">
+      <div className="w-full sm:max-w-xl md:max-w-2xl lg:max-w-3xl mx-auto m-2 sm:mt-10 p-4 sm:p-5 bg-white rounded-lg shadow-none sm:shadow-lg">
+        <div className="flex sm:flex-row items-center justify-between sm:justify-start sm:items-start p-4 sm:p-5">
           {/* Profile Image */}
           <img 
-            className="w-24 h-24 mr-4 rounded-full bg-gray-300 object-cover"
+            className="w-16 h-16 xs:w-20 xs:h-20 sm:w-24 sm:h-24 rounded-full bg-gray-300 object-cover"
             src={profileData.image} 
             alt={profileData.name}
           />
           
           {/* User Info */}
-          <div className="ml-6">
-            <h2 className="text-2xl font-semibold text-gray-800">{profileData.name}</h2>
-            <div className="flex space-x-6 mt-2 text-md text-gray-600">
+          <div className="sm:ml-6 mt-4 sm:mt-0 text-center sm:text-left">
+            <h2 className="text-md sm:text-2xl font-semibold text-gray-800">{profileData.name}</h2>
+            <div className="flex justify-center sm:justify-start space-x-4 mt-2 text-sm sm:text-md text-gray-600">
               <div className="flex flex-col items-center">
                 <span className="font-bold text-gray-800">{profileBlogs.length}</span>
                 <span>Blogs</span>
@@ -75,33 +75,34 @@ const ProfileView = ({ userId = null }) => {
         </div>
 
         {/* Bio Section */}
-        <div className="mt-4 px-10 text-gray-700">
+        <div className="mt-2 px-4 sm:px-10 text-gray-700 text-left sm:text-left">
           <h3 className="text-lg font-medium">Bio</h3>
           <p className="mt-2 leading-relaxed">{profileData.bio}</p>
         </div>
 
         {/* Action Buttons */}
         {isCurrentUser ? (
-          <div className="mt-6 flex space-x-4">
+          <div className="mt-6 flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-4 px-4 sm:px-10">
             <Link 
               to="/home/editprofile" 
-              className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+              className="w-full sm:w-auto flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700"
             >
               Edit Profile
             </Link>
-            <button className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+            <button className="w-full sm:w-auto flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700">
               Share Profile
             </button>
           </div>
         ) : (
-          <div className="mt-6 px-10">
-              <FollowButton userId={userId} />
+          <div className="mt-6 px-4 sm:px-10">
+            <FollowButton userId={userId} />
           </div>
         )}
       </div>
 
+
       {/* Blogs Section */}
-      <div className="mt-12 px-4 sm:px-6 md:px-8 lg:px-12 max-w-3xl mx-auto flex flex-col gap-8">
+      <div className="mt-5 sm:mt-12 px-4 sm:px-6 md:px-8 lg:px-12 max-w-3xl mx-auto flex flex-col gap-8">
           {profileBlogs?.length > 0 ? (
               profileBlogs.map((blog) => (
                   <BlogCard 

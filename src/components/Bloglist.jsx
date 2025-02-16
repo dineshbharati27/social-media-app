@@ -61,14 +61,14 @@ const BlogList = () => {
 
   return (
     <>
-    <div className="px-10">
-    <Stories/>
+    <div className="px-2 md:px-10">
+      <Stories/>
     </div>
     
     <div className="min-h-screen bg-gray-50">
-      <div className=" mx-auto px-4 sm:px-6 lg:px-8">
+      <div className=" mx-auto px-3 sm:px-1 lg:px-8">
 
-      <div className="mt-5 px-4 sm:px-6 md:px-8 lg:px-12 max-w-3xl mx-auto flex flex-col gap-8">
+      <div className="mt-0 md:mt-5 sm:px-1 md:px-8 lg:px-12 max-w-3xl mx-auto flex flex-col gap-8">
           {currentBlogs.map((blog, index) => {
             // Find the user that matches the blog's userId
             const user = allUsers.find(user => user._id === blog.userId.toString());

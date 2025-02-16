@@ -1,37 +1,25 @@
-import { Link, useLocation } from 'react-router-dom'
-import { Home, Info, Mail } from 'lucide-react'
+import { Bell, MessageCircle } from "lucide-react";
+import { Link } from "react-router-dom";
 
-export default function Navbar() {
-  const location = useLocation()
-  
-  const links = [
-    { to: '/', icon: Home, label: 'Home' },
-    { to: '/about', icon: Info, label: 'About' },
-    { to: '/contact', icon: Mail, label: 'Contact' }
-  ]
-
+const Navbar = () => {
   return (
-    <nav className="bg-white shadow">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between h-16">
-          <div className="flex space-x-8">
-            {links.map(({ to, icon: Icon, label }) => (
-              <Link
-                key={to}
-                to={to}
-                className={`inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium ${
-                  location.pathname === to
-                    ? 'border-blue-500 text-gray-900'
-                    : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700'
-                }`}
-              >
-                <Icon className="w-4 h-4 mr-2" />
-                {label}
-              </Link>
-            ))}
-          </div>
-        </div>
+    <div className="fixed top-0 left-0 w-full z-50 bg-white shadow-sm px-4 py-3 flex items-center justify-between md:hidden">
+      {/* ✅ Logo */}
+      <Link to="/home" className="text-xl font-bold text-gray-900">
+        Vibesta
+      </Link>
+
+      {/* ✅ Icons (Right Side) */}
+      <div className="flex items-center space-x-4">
+        <Link to="/home/notifications">
+          <Bell className="h-6 w-6 text-gray-700 cursor-pointer" />
+        </Link>
+        <Link to="/home/messages">
+          <MessageCircle className="h-6 w-6 text-gray-700 cursor-pointer" />
+        </Link>
       </div>
-    </nav>
-  )
-}
+    </div>
+  );
+};
+
+export default Navbar;
