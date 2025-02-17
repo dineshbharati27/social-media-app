@@ -33,8 +33,16 @@ export const blogs = {
   }),
   comment: (id, text) => api.put(`/blogs/comment/${id}`, { text }),
   like: (id) => api.put(`/blogs/like/${id}`),
+};
 
-
+export const stories = {
+  create: (formData) => api.post('/stories/create', formData, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+  }),
+  getFeed: () => api.get('/stories/feed'),
+  delete: (id) => api.delete(`/stories/${id}`),
 };
 
 

@@ -172,20 +172,22 @@ const authSlice = createSlice({
         state.error = action.payload;
       })
       .addCase(followUser.pending, (state) => {
-        state.isLoading = true;
         state.error = null;
       })
       .addCase(followUser.fulfilled, (state, action) => {
-          state.isLoading = false;
-          state.user = action.payload.currentUser;
-          // Update the user in allUsers array
-          const userIndex = state.allUsers?.findIndex(
-              user => user._id === action.payload.userToFollow._id
+        // Update current user data
+        state.user = action.payload.currentUser;
+        
+        // Update user in allUsers array
+        if (state.allUsers) {
+          state.allUsers = state.allUsers.map(user => 
+            user._id === action.payload.userToFollow._id 
+              ? action.payload.userToFollow 
+              : user
           );
-          if (userIndex !== -1) {
-              state.allUsers[userIndex] = action.payload.userToFollow;
-          }
-          toast.success(action.payload.isFollowing ? 'Started following' : 'Unfollowed');
+        }
+        
+        toast.success(action.payload.isFollowing ? 'Started following' : 'Unfollowed');
       })
       .addCase(followUser.rejected, (state, action) => {
           state.isLoading = false;

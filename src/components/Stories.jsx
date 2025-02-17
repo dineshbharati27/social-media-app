@@ -25,7 +25,7 @@ const stories = [
 
 const Stories = () => {
   return (
-    <div className="flex space-x-3 overflow-x-scroll hide-scrollbar mt-2 py-2 sm:py-3">
+    <div className="flex space-x-3 overflow-x-scroll hide-scrollbar mt-5 md:mt-2 py-2 sm:py-3">
       {stories.map(story => (
         <div key={story.id} className="flex flex-col items-center">
           <img src={story.img} 

@@ -154,15 +154,12 @@ exports.followUser = async (req, res) => {
 
         await Promise.all([currentUser.save(), userToFollow.save()]);
 
-        // Get updated users with populated data
-        const updatedCurrentUser = await User.findById(currentUserId);
-        const updatedUserToFollow = await User.findById(userToFollowId);
-
+        // Return minimal data without re-fetching
         res.json({
             success: true,
             isFollowing: !isFollowing,
-            currentUser: updatedCurrentUser,
-            userToFollow: updatedUserToFollow
+            currentUser: currentUser,
+            userToFollow: userToFollow
         });
     } catch (error) {
         console.error(error);

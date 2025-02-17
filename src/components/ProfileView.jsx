@@ -16,12 +16,13 @@ const ProfileView = ({ userId = null }) => {
   const isCurrentUser = !userId;
 
   useEffect(() => {
-    if (isCurrentUser) {
+    // Only fetch data on initial load
+    if (isCurrentUser && !user) {
       dispatch(getProfile());
-    } else {
+    } else if (!isCurrentUser && !allUsers) {
       dispatch(getAllUsers());
     }
-  }, [dispatch, isCurrentUser]);
+  }, [dispatch, isCurrentUser, user, allUsers]);
 
   useEffect(() => {
     if (isCurrentUser && user) {
@@ -35,10 +36,18 @@ const ProfileView = ({ userId = null }) => {
     }
   }, [isCurrentUser, user, allUsers, userId, userBlogs, blogs]);
 
-  if (isLoading || !profileData) {
+  if (!profileData && isLoading) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">Loading profile...</div>
+      </div>
+    );
+  }
+
+  if (!profileData) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">User not found</div>
       </div>
     );
   }
@@ -102,7 +111,7 @@ const ProfileView = ({ userId = null }) => {
 
 
       {/* Blogs Section */}
-      <div className="mt-5 sm:mt-12 px-4 sm:px-6 md:px-8 lg:px-12 max-w-3xl mx-auto flex flex-col gap-8">
+      <div className="mt-5 sm:mt-12 px-4 sm:px-6 md:px-8 lg:px-12 max-w-3xl mx-auto flex flex-col gap-4">
           {profileBlogs?.length > 0 ? (
               profileBlogs.map((blog) => (
                   <BlogCard 

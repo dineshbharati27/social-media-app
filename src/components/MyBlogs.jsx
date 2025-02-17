@@ -68,7 +68,7 @@ const MyBlogs = () => {
             </Link>
           </div>
         ) : ( 
-          <div className="mt-5 sm:mt-12 px-1 sm:px-6 md:px-8 lg:px-12 max-w-3xl mx-auto flex flex-col gap-8">
+          <div className="mt-5 sm:mt-12 px-1 sm:px-6 md:px-8 lg:px-12 max-w-3xl mx-auto flex flex-col gap-4">
             {userBlogs.map((blog) => (
               <BlogCard key={blog._id} blog={blog} user={user} allUsers={allUsers} isMyBlog={true} onDelete={handleDelete} onEdit={handleEdit} />
             ))}
