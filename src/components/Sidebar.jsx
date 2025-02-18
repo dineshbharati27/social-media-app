@@ -9,7 +9,7 @@ const Sidebar = () => {
   const menuItems = [
     { icon: <Home />, label: 'Feed', link: "" },
     { icon: <Search />, label: 'Search', link: "search" },
-    { icon: <MessageCircle />, label: 'Messages', link: "messages" },
+    { icon: <MessageCircle />, label: 'Messages', link: "/chat" },
     { icon: <PlusSquare />, label: 'Create', link: "create" },
     { icon: <Film />, label: 'My Blogs', link: "myblogs" },
     { icon: <User />, label: 'Profile', link: "profile" },  

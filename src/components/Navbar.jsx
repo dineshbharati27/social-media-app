@@ -14,7 +14,7 @@ const Navbar = () => {
         <Link to="/home/notifications">
           <Bell className="h-6 w-6 text-gray-700 cursor-pointer" />
         </Link>
-        <Link to="/home/messages">
+        <Link to="/chat">
           <MessageCircle className="h-6 w-6 text-gray-700 cursor-pointer" />
         </Link>
       </div>

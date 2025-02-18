@@ -9,6 +9,7 @@ import { Toaster } from 'react-hot-toast';
 import { store } from './store'
 import ProtectedRoute from './components/ProtectedRoute'
 import SignUp from './pages/SignUp'
+import Chat from './pages/Chat'
 
 function App() {
   return (
@@ -20,7 +21,8 @@ function App() {
             <Route path='signup' element={<SignUp />}/>
             <Route path='/home/*' element={
               <ProtectedRoute><Home /></ProtectedRoute>} />
-            <Route path='/chat' element={<Contact/>}/>
+            <Route path='/chat' element={
+              <ProtectedRoute><Chat /></ProtectedRoute>} />
           </Routes>
         </main>
         <Toaster position="top-right" />
