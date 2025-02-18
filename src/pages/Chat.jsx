@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useSelector } from 'react-redux';
-import { Search, Smile, Paperclip } from 'lucide-react';
+import { Search, Smile, Paperclip, ArrowLeft } from 'lucide-react';
 import { useSocket } from '../context/SocketContext';
 import EmojiPicker from 'emoji-picker-react';
 import { messages as messageApi } from '../services/api';
@@ -11,10 +11,11 @@ const Chat = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedUser, setSelectedUser] = useState(null);
   const [message, setMessage] = useState('');
-  const [messages, setMessages] = useState([]); // This state variable name conflicts with the import
+  const [messages, setMessages] = useState([]);
   const [isTyping, setIsTyping] = useState(false);
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
   const [file, setFile] = useState(null);
+  const [showChat, setShowChat] = useState(false);
   
   const messagesEndRef = useRef(null);
 
@@ -56,10 +57,18 @@ const Chat = () => {
     }
   }, [socket, selectedUser, user._id]);
 
-  // Scroll to bottom when messages change
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
+
+  const handleUserSelect = (user) => {
+    setSelectedUser(user);
+    setShowChat(true);
+  };
+
+  const handleBack = () => {
+    setShowChat(false);
+  };
 
   const handleSendMessage = async (e) => {
     e.preventDefault();
@@ -98,15 +107,15 @@ const Chat = () => {
 
   return (
     <div className="flex h-screen bg-gray-100">
-      {/* Left Sidebar */}
-      <div className="w-1/4 bg-white border-r">
-        {/* App Name */}
-        <div className="p-4 border-b">
+      {/* Left Sidebar - Users List */}
+      <div className={`${showChat ? 'hidden md:flex' : 'flex'} w-full md:w-1/4 flex-col bg-white border-r`}>
+        {/* App Name - Fixed */}
+        <div className="p-4 border-b bg-white">
           <h1 className="text-2xl font-bold text-gray-800">Vibesta</h1>
         </div>
 
-        {/* Search Bar */}
-        <div className="p-4">
+        {/* Search Bar - Fixed */}
+        <div className="p-4 border-b bg-white">
           <div className="relative">
             <Search className="absolute left-3 top-2.5 h-5 w-5 text-gray-400" />
             <input
@@ -119,12 +128,12 @@ const Chat = () => {
           </div>
         </div>
 
-        {/* Users List */}
-        <div className="overflow-y-auto h-[calc(100vh-140px)]">
+        {/* Users List - Scrollable */}
+        <div className="flex-1 overflow-y-auto">
           {followedUsers?.map(followedUser => (
             <div
               key={followedUser._id}
-              onClick={() => setSelectedUser(followedUser)}
+              onClick={() => handleUserSelect(followedUser)}
               className={`flex items-center gap-3 p-4 hover:bg-gray-50 cursor-pointer ${
                 selectedUser?._id === followedUser._id ? 'bg-blue-50' : ''
               }`}
@@ -144,12 +153,18 @@ const Chat = () => {
       </div>
 
       {/* Right Chat Area */}
-      <div className="flex-1 flex flex-col">
+      <div className={`${!showChat ? 'hidden md:flex' : 'flex'} flex-1 flex-col h-screen`}>
         {selectedUser ? (
           <>
-            {/* Chat Header */}
-            <div className="p-4 bg-white border-b">
+            {/* Chat Header - Fixed */}
+            <div className="p-4 bg-white border-b sticky top-0 z-10">
               <div className="flex items-center gap-3">
+                <button
+                  onClick={handleBack}
+                  className="md:hidden p-2 hover:bg-gray-100 rounded-full"
+                >
+                  <ArrowLeft className="h-6 w-6 text-gray-600" />
+                </button>
                 <img
                   src={selectedUser.image}
                   alt={selectedUser.name}
@@ -164,15 +179,15 @@ const Chat = () => {
               </div>
             </div>
 
-            {/* Chat Messages */}
-            <div className="flex-1 overflow-y-auto p-4 space-y-4">
+            {/* Chat Messages - Scrollable */}
+            <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-gray-50 hide-scrollbar">
               {messages.map((msg, index) => (
                 <div
                   key={index}
                   className={`flex ${msg.sender._id === user._id ? 'justify-end' : 'justify-start'}`}
                 >
                   <div
-                    className={`max-w-[70%] p-3 rounded-lg ${
+                    className={`max-w-[70%] md:max-w-[60%] p-3 rounded-lg break-words ${
                       msg.sender._id === user._id
                         ? 'bg-blue-500 text-white'
                         : 'bg-gray-200 text-gray-800'
@@ -182,20 +197,20 @@ const Chat = () => {
                       <img 
                         src={msg.fileUrl} 
                         alt="Shared image" 
-                        className="rounded-lg max-w-full"
+                        className="rounded-lg max-w-full h-auto"
                       />
                     ) : msg.type === 'file' ? (
                       <a 
                         href={msg.fileUrl}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="flex items-center gap-2 text-blue-600"
+                        className="flex items-center gap-2 text-blue-600 break-all"
                       >
-                        <Paperclip className="h-4 w-4" />
-                        Download File
+                        <Paperclip className="h-4 w-4 flex-shrink-0" />
+                        <span className="overflow-hidden text-ellipsis">Download File</span>
                       </a>
                     ) : (
-                      <p>{msg.content}</p>
+                      <p className="whitespace-pre-wrap">{msg.content}</p>
                     )}
                     <span className="text-xs opacity-70 mt-1 block">
                       {new Date(msg.createdAt).toLocaleTimeString()}
@@ -206,68 +221,70 @@ const Chat = () => {
               <div ref={messagesEndRef} />
             </div>
 
-            {/* Message Input */}
-            <form onSubmit={handleSendMessage} className="p-4 bg-white border-t">
-              <div className="flex gap-2">
-                <button
-                  type="button"
-                  onClick={() => setShowEmojiPicker(!showEmojiPicker)}
-                  className="p-2 hover:bg-gray-100 rounded-full"
-                >
-                  <Smile className="h-6 w-6 text-gray-600" />
-                </button>
-                <input
-                  type="file"
-                  id="file-input"
-                  className="hidden"
-                  onChange={(e) => setFile(e.target.files[0])}
-                />
-                <label
-                  htmlFor="file-input"
-                  className="p-2 hover:bg-gray-100 rounded-full cursor-pointer"
-                >
-                  <Paperclip className="h-6 w-6 text-gray-600" />
-                </label>
-                <input
-                  type="text"
-                  value={message}
-                  onChange={handleTyping}
-                  placeholder="Type a message..."
-                  className="flex-1 p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
-                <button
-                  type="submit"
-                  disabled={!message.trim() && !file}
-                  className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 disabled:bg-gray-300 disabled:cursor-not-allowed"
-                >
-                  Send
-                </button>
-              </div>
-              {showEmojiPicker && (
-                <div className="absolute bottom-20 right-4">
-                  <EmojiPicker
-                    onEmojiClick={(emojiObject) => {
-                      setMessage(prev => prev + emojiObject.emoji);
-                      setShowEmojiPicker(false);
-                    }}
-                  />
-                </div>
-              )}
-              {file && (
-                <div className="mt-2 p-2 bg-gray-100 rounded-lg flex items-center justify-between">
-                  <span className="text-sm text-gray-600">
-                    {file.name}
-                  </span>
+            {/* Message Input Form - Fixed at bottom */}
+            <div className="border-t bg-white sticky bottom-0 z-10">
+              <form onSubmit={handleSendMessage} className="p-2 md:p-4">
+                <div className="flex gap-2">
                   <button
                     type="button"
-                    onClick={() => setFile(null)}
-                    className="text-red-500 hover:text-red-600"
+                    onClick={() => setShowEmojiPicker(!showEmojiPicker)}
+                    className="p-2 hover:bg-gray-100 rounded-full"
                   >
-                    Remove
+                    <Smile className="h-6 w-6 text-gray-600" />
+                  </button>
+                  <input
+                    type="file"
+                    id="file-input"
+                    className="hidden"
+                    onChange={(e) => setFile(e.target.files[0])}
+                  />
+                  <label
+                    htmlFor="file-input"
+                    className="p-2 hover:bg-gray-100 rounded-full cursor-pointer"
+                  >
+                    <Paperclip className="h-6 w-6 text-gray-600" />
+                  </label>
+                  <input
+                    type="text"
+                    value={message}
+                    onChange={handleTyping}
+                    placeholder="Type a message..."
+                    className="flex-1 p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  />
+                  <button
+                    type="submit"
+                    disabled={!message.trim() && !file}
+                    className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 disabled:bg-gray-300 disabled:cursor-not-allowed"
+                  >
+                    Send
                   </button>
                 </div>
-              )}
-            </form>
+                {showEmojiPicker && (
+                  <div className="absolute bottom-full right-4 z-50">
+                    <EmojiPicker
+                      onEmojiClick={(emojiObject) => {
+                        setMessage(prev => prev + emojiObject.emoji);
+                        setShowEmojiPicker(false);
+                      }}
+                    />
+                  </div>
+                )}
+                {file && (
+                  <div className="mt-2 p-2 bg-gray-100 rounded-lg flex items-center justify-between">
+                    <span className="text-sm text-gray-600 truncate flex-1 mr-2">
+                      {file.name}
+                    </span>
+                    <button
+                      type="button"
+                      onClick={() => setFile(null)}
+                      className="text-red-500 hover:text-red-600 flex-shrink-0"
+                    >
+                      Remove
+                    </button>
+                  </div>
+                )}
+              </form>
+            </div>
           </>
         ) : (
           <div className="flex-1 flex items-center justify-center text-gray-500">
