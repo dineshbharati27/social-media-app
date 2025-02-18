@@ -12,9 +12,6 @@ const StoriesBar = ({ onStoryClick }) => {
     dispatch(getStories());
   }, [dispatch]);
 
-  // Debug logs
-  console.log('Stories from Redux:', stories);
-
   if (isLoading) {
     return (
       <div className="flex space-x-4 p-4 overflow-x-auto bg-white rounded-lg shadow-sm">
@@ -51,11 +48,11 @@ const StoriesBar = ({ onStoryClick }) => {
     <div className="flex space-x-2 sm:space-x-4 p-2 sm:p-4 overflow-x-auto bg-white rounded-lg shadow-sm">
       <AddStoryButton />
       
-      {stories.map((userStories) => (
+      {stories.map((userStories, index) => (
         <div
           key={userStories.user._id}
           className="flex flex-col items-center cursor-pointer"
-          onClick={() => onStoryClick(userStories)}
+          onClick={() => onStoryClick(userStories, index)}  // Pass the index here
         >
           <div className={`w-12 h-12 sm:w-16 sm:h-16 rounded-full ring-2 ${
             userStories.stories.some(story => !story.viewed)

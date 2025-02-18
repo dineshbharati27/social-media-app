@@ -3,8 +3,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { XMarkIcon, ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/24/outline';
 import { deleteStory } from '../store/slices/storySlice';
 
-const StoryViewer = ({ stories, onClose }) => {
-  const [currentUserIndex, setCurrentUserIndex] = useState(0);
+const StoryViewer = ({ stories, onClose, initialUserIndex = 0  }) => {
+  const [currentUserIndex, setCurrentUserIndex] = useState(initialUserIndex);
   const [currentStoryIndex, setCurrentStoryIndex] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
   const [touchStart, setTouchStart] = useState(null);

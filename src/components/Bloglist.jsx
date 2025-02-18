@@ -65,18 +65,22 @@ const BlogList = () => {
     <>
       {selectedStories ? (
         <StoryViewer
-          stories={selectedStories}
-          onClose={() => setSelectedStories(null)}
+        stories={selectedStories.stories}
+        onClose={() => setSelectedStories(null)}
+        initialUserIndex={selectedStories.initialUserIndex}
         />
       ) : (
         <div className="min-h-screen bg-gray-50">
           <div className="mx-auto mt-5 md:mt-0 px-3 sm:px-1 lg:px-8">
             {/* Stories Bar */}
             <div className="mt-0 md:mt-5 sm:px-1 md:px-8 lg:px-12 max-w-3xl mx-auto">
-            <StoriesBar onStoryClick={(userStories) => {
+            <StoriesBar onStoryClick={(userStories, index) => {
                 // Pass the entire stories array and the selected user's index
                 const userIndex = stories.findIndex(story => story.user._id === userStories.user._id);
-                setSelectedStories(stories);
+                setSelectedStories({
+                  stories: stories,
+                  initialUserIndex: index
+                });
               }} />
             </div>
 
