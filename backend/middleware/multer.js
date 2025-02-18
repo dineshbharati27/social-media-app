@@ -10,25 +10,39 @@ cloudinary.config({
   api_secret: "hlfDzEKUciCus4jg7hmMXU0BcA4",
 });
 
-// Multer Storage for Cloudinary
-const storage = new CloudinaryStorage({
-  cloudinary,
-  params: async (req, file) => ({
-    folder: req.folderName || 'uploads', // Set dynamically
-    resource_type: 'image',
-    format: file.mimetype.split('/')[1], // Auto-detect format
-  }),
-});
-
 // File Filter for Allowed Formats
 const fileFilter = (req, file, cb) => {
-  const allowedMimeTypes = ['image/jpeg', 'image/png'];
+  const allowedMimeTypes = [
+    'image/jpeg',
+    'image/png',
+    'image/gif',
+    'application/pdf',
+    'application/msword',
+    'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+  ];
+  
   if (allowedMimeTypes.includes(file.mimetype)) {
     cb(null, true);
   } else {
-    cb(new Error('Only PNG and JPG images are allowed'), false);
+    cb(new Error('Invalid file type'), false);
   }
 };
+
+const storage = new CloudinaryStorage({
+  cloudinary,
+  params: async (req, file) => {
+    let folder = 'uploads';
+    if (req.baseUrl.includes('messages')) {
+      folder = 'chat-attachments';
+    }
+    return {
+      folder,
+      resource_type: 'auto', // This allows for both images and other file types
+      format: file.mimetype.split('/')[1],
+    };
+  },
+});
+
 
 const upload = multer({ storage, fileFilter });
 

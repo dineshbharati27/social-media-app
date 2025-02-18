@@ -3,7 +3,6 @@
   "version": "1.0.0",
   "description": "backend of the socal media app",
   "main": "server.js",
-  
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "nodemon server.js",
@@ -22,6 +21,7 @@
     "multer": "^1.4.5-lts.1",
     "multer-storage-cloudinary": "^4.0.0",
     "nodemon": "^3.1.9",
+    "socket.io": "^4.8.1",
     "validator": "^13.12.0"
   }
 }

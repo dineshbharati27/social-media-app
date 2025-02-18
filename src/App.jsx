@@ -10,23 +10,25 @@ import { store } from './store'
 import ProtectedRoute from './components/ProtectedRoute'
 import SignUp from './pages/SignUp'
 import Chat from './pages/Chat'
-
+import { SocketProvider } from './context/SocketContext'
 function App() {
   return (
     <Provider store={store}>
-      <div>
-        <main className='bg-gray-50'>
-          <Routes>
-            <Route path="/" element={<Login />} />
-            <Route path='signup' element={<SignUp />}/>
-            <Route path='/home/*' element={
-              <ProtectedRoute><Home /></ProtectedRoute>} />
-            <Route path='/chat' element={
-              <ProtectedRoute><Chat /></ProtectedRoute>} />
-          </Routes>
-        </main>
-        <Toaster position="top-right" />
-      </div>
+      <SocketProvider>
+        <div>
+          <main className='bg-gray-50'>
+            <Routes>
+              <Route path="/" element={<Login />} />
+              <Route path='signup' element={<SignUp />}/>
+              <Route path='/home/*' element={
+                <ProtectedRoute><Home /></ProtectedRoute>} />
+              <Route path='/chat' element={
+                <ProtectedRoute><Chat /></ProtectedRoute>} />
+            </Routes>
+          </main>
+          <Toaster position="top-right" />
+        </div>
+      </SocketProvider>
     </Provider>
   )
 }

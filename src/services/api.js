@@ -45,5 +45,14 @@ export const stories = {
   delete: (id) => api.delete(`/stories/${id}`),
 };
 
+export const messages = {
+  getMessages: (roomId) => api.get(`/messages/${roomId}`),
+  sendMessage: (formData) => api.post('/messages/send', formData, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+  }),
+};
+
 
 export default api;
