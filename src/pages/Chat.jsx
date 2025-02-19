@@ -1,11 +1,13 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useSelector } from 'react-redux';
-import { Search, Smile, Paperclip, ArrowLeft } from 'lucide-react';
+import { Search, Smile, Paperclip, ArrowLeft, Home } from 'lucide-react';
 import { useSocket } from '../context/SocketContext';
 import EmojiPicker from 'emoji-picker-react';
 import { messages as messageApi } from '../services/api';
+import { useNavigate } from 'react-router-dom';
 
 const Chat = () => {
+  const navigate = useNavigate();
   const socket = useSocket();
   const { user, allUsers } = useSelector(state => state.auth);
   const [searchTerm, setSearchTerm] = useState('');
@@ -70,6 +72,10 @@ const Chat = () => {
     setShowChat(false);
   };
 
+  const handleHomeClick = () => {
+    navigate('/home');
+  };
+
   const handleSendMessage = async (e) => {
     e.preventDefault();
     if (!message.trim() && !file) return;
@@ -77,9 +83,15 @@ const Chat = () => {
     const roomId = [user._id, selectedUser._id].sort().join('-');
     const formData = new FormData();
     formData.append('receiverId', selectedUser._id);
-    formData.append('content', message);
     formData.append('roomId', roomId);
-    if (file) formData.append('file', file);
+    
+    if (message.trim()) {
+      formData.append('content', message);
+    }
+    
+    if (file) {
+      formData.append('file', file);
+    }
 
     try {
       const response = await messageApi.sendMessage(formData);
@@ -114,8 +126,16 @@ const Chat = () => {
     } w-full md:w-1/4 lg:w-1/5 flex-col bg-white border-r`}
   >
     {/* App Name - Fixed */}
-    <div className="p-4 border-b bg-white">
+    <div className="p-4 border-b bg-white flex justify-start space-x-4 items-center">
+      <button
+          onClick={handleHomeClick}
+          className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+          title="Back to Home"
+        >
+          <Home className="h-6 w-6 text-gray-600" />
+      </button>
       <h1 className="text-2xl font-bold text-gray-800">Vibesta</h1>
+      
     </div>
 
     {/* Search Bar - Fixed */}

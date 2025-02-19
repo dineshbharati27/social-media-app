@@ -23,15 +23,21 @@ exports.sendMessage = async (req, res) => {
     let messageData = {
       sender: senderId,
       receiver: receiverId,
-      content,
       roomId,
+      content: content || '', // Set default empty string if no content
       type: 'text'
     };
 
     // Handle file uploads
     if (req.file) {
       messageData.type = req.file.mimetype.startsWith('image/') ? 'image' : 'file';
-      messageData.fileUrl = req.file.path; // Cloudinary URL
+      messageData.fileUrl = req.file.path;
+      // If no content was provided but there's a file, set a default content
+      if (!content) {
+        messageData.content = req.file.mimetype.startsWith('image/') 
+          ? 'Sent an image' 
+          : `Sent a file: ${req.file.originalname}`;
+      }
     }
 
     const message = await Message.create(messageData);
